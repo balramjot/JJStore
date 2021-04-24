@@ -1,0 +1,182 @@
+<div class="col-lg-12">
+    <mat-progress-bar mode="query" *ngIf="dataLoading"></mat-progress-bar> 
+<div class="content">
+    <div class="row">
+        <div class="col-md-12">
+        <div class="card card-user">
+            <ng-container>
+                <div class="card-body">
+                <div class="alert alert-danger" *ngIf="error">{{ errorMessage }}</div>
+                <div class="alert alert-success" *ngIf="success">{{ errorMessage }}</div>
+                <ng-container>
+                    <form [formGroup]="addProductForm" (change)="formChanged()" enctype="multipart/form-data" (ngSubmit)="addProduct(addProductForm.value)">
+                        <div class="row">
+                            <div class="col-md-4 pr-1">
+                                <div class="form-group">
+                                    <label>Sku No.</label>
+                                        <div class="clear"></div>
+                                    <mat-form-field class="form-control-mat-text" appearance="outline">
+                                        <mat-label>Sku No.</mat-label>
+                                        <input matInput type="text" formControlName="skuNo" id="skuNo" autocomplete="off" required>
+                                        <mat-error class="mat-error-custom" *ngIf="addProductForm.hasError('required','skuNo')">You must enter sku number</mat-error>
+                                        <mat-error class="mat-error-custom" *ngIf="addProductForm.hasError('asynerror','skuNo')">Sku number already exists</mat-error>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                            <div class="col-md-8 pl-1">
+                                <div class="form-group">
+                                    <label>Product Name</label>
+                                        <div class="clear"></div>
+                                    <mat-form-field class="form-control-mat-text" appearance="outline">
+                                        <mat-label>Product Name</mat-label>
+                                        <input matInput type="text" formControlName="productName" id="productName" autocomplete="off" required>
+                                        <mat-error class="mat-error-custom" *ngIf="addProductForm.hasError('required','productName')">You must enter product name</mat-error>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 pr-1">
+                                <div class="form-group">
+                                    <label>Category</label>
+                                        <div class="clear"></div>
+                                    <mat-form-field class="form-control-mat-text" appearance="outline">
+                                        <mat-label>Category</mat-label>
+                                        <mat-select formControlName="category" id="category" required>
+                                            <!--mat-option *ngFor="let categoryD of fetchData.categoryData" value={{categoryD.id}}>{{categoryD.category}}</mat-option-->
+                                            <mat-option value="1">test</mat-option>
+                                        </mat-select>
+                                        <mat-error class="mat-error-custom" *ngIf="addProductForm.hasError('required','category')">You must select a category first</mat-error>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                            <div class="col-md-6 pl-1">
+                                <div class="form-group">
+                                    <label>Manufacturer</label>
+                                        <div class="clear"></div>
+                                    <mat-form-field class="form-control-mat-text" appearance="outline">
+                                        <mat-label>Manufacturer</mat-label>
+                                        <mat-select formControlName="manufacturer" id="manufacturer" required>
+                                            <!--mat-option *ngFor="let categoryD of fetchData.categoryData" value={{categoryD.id}}>{{categoryD.category}}</mat-option-->
+                                            <mat-option value="1">test</mat-option>
+                                        </mat-select>
+                                        <mat-error class="mat-error-custom" *ngIf="addProductForm.hasError('required','manufacturer')">You must select a manufacturer first</mat-error>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 pr-1">
+                                <div class="form-group">
+                                    <label>Quantity in Stock</label>
+                                        <div class="clear"></div>
+                                    <mat-form-field class="form-control-mat-text" appearance="outline">
+                                        <mat-label>Quantity in Stock</mat-label>
+                                        <input matInput type="text" formControlName="quantity" id="quantity" autocomplete="off" required>
+                                        <mat-error class="mat-error-custom" *ngIf="addProductForm.hasError('required','quantity')">You must enter a quantity in stock</mat-error>
+                                        <mat-error class="mat-error-custom" *ngIf="addProductForm.hasError('pattern','quantity')">Invalid quantity in stock value</mat-error>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                            <div class="col-md-6 pl-1">
+                                <div class="form-group">
+                                    <label>Alloted Quantity</label>
+                                        <div class="clear"></div>
+                                    <mat-form-field class="form-control-mat-text" appearance="outline">
+                                        <mat-label>Alloted Quantity</mat-label>
+                                        <input matInput type="text" formControlName="allotedQuantity" id="allotedQuantity" autocomplete="off" required>
+                                        <mat-error class="mat-error-custom" *ngIf="addProductForm.hasError('required','allotedQuantity')">You must enter a alloted quantity</mat-error>
+                                        <mat-error class="mat-error-custom" *ngIf="addProductForm.hasError('pattern','allotedQuantity')">Invalid alloted quantity value</mat-error>
+                                        <mat-error class="mat-error-custom" *ngIf="addProductForm.hasError('qtyAltQty','allotedQuantity')">Alloted quantity should be greater than or equal to quanity in stock</mat-error>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4 pr-1">
+                                <div class="form-group">
+                                    <label>Price</label>
+                                        <div class="clear"></div>
+                                    <mat-form-field class="form-control-mat-text" appearance="outline">
+                                        <mat-label>Price</mat-label>
+                                        <input matInput type="number" formControlName="price" id="price" autocomplete="off" required>
+                                        <mat-error class="mat-error-custom" *ngIf="addProductForm.hasError('required','price')">You must enter a valid price</mat-error>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                            <div class="col-md-8 pl-1">
+                                <div class="form-group">
+                                    <label>Product Description</label>
+                                        <div class="clear"></div>
+                                    <mat-form-field class="form-control-mat-text" appearance="outline">
+                                        <mat-label>Product Description</mat-label>
+                                        <input matInput type="text" formControlName="productDescription" id="productDescription" autocomplete="off">
+                                        <mat-error class="mat-error-custom" *ngIf="addProductForm.hasError('required','productDescription')">You must enter product description</mat-error>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4 pr-1">
+                                <div class="form-group">
+                                    <label>Product Images</label>
+                                        <div class="clear"></div>
+                                    <div class="dropzone" appDragndrop (fileDropped) = "onFileDropped($event)">
+                                        <input type="file" #fileDropRef id="fileDropRef" multiple name="part_image" (change)="fileBrowseHandler($event.target.files)" class="multi_upload"/>
+                                        <img src="assets/img/dnd/ic-upload-file.svg" alt="">
+                                        <br/><br/>
+                                        <strong>Drag and drop</strong>
+                                        <br/>
+                                        <span>or</span>
+                                        <br/>
+                                        <strong>Click to select</strong>
+                                    </div>                              
+                                    <button mat-fab color="primary" (click)="uploadFile()" type="button" [disabled]="uploadButtonCheck === false">
+                                        <mat-icon>upload</mat-icon>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="col-md-8 pl-1 uploaded_files_cont">
+                                <div class="files-list">
+                                    <div class="single-file" *ngFor="let file of files; let i = index">
+                                        <div class="row">
+                                            <div class="col-md-2">
+                                                <img src="assets/img/dnd/ic-file.svg" width="45px" alt="file">
+                                            </div>
+                                            <div class="col-md-10">
+                                                <div class="info">
+                                                    <span class="name">{{ file?.name }}</span>
+                                                    <i class="nc-icon nc-simple-remove delete close float-right bg-danger rounded-circle p-1 text-dark" width="20px" alt="file" (click)="deleteFile(i)" *ngIf="file?.progressBarValue"></i>
+                                                        <br/>
+                                                    <span class="size">{{ formatBytes(file?.size) }}</span>
+                                                    <app-progressbar [progress]="file?.progress"></app-progressbar>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                            <br/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="update ml-auto mr-auto">
+                                <button mat-raised-button class="btn btn-primary btn-round" [disabled]="addProductForm.invalid" type="submit">Save</button>
+                                <button mat-raised-button class="btn btn-danger btn-round" type="button" (click)="closeDialog()">Cancel</button>
+                                    <br/>
+                            </div>
+                        </div>
+
+                    </form>
+
+                   
+                </ng-container>
+                </div>
+            </ng-container>
+
+        </div>
+        </div>
+    </div>
+    </div>
+</div>
